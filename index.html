@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interest Rate Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #4CAF50;
+            font-size: 2em;
+        }
+
+        h3 {
+            color: #333;
+            font-size: 1.5em;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        .input-box {
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 1em;
+            width: 80%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .sub-options button {
+            background-color: #ff9800;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .sub-options button:hover {
+            background-color: #f57c00;
+        }
+
+        .google-translate {
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Main Calculator Section -->
+    <div id="main-section">
+        <h1>TN Interest Rate Calculator</h1>
+
+        <div>
+            <button class="button" onclick="showRatePercentageFinder()">Bank Rate Percentage</button>
+            <button class="button" onclick="showInterestRateFinder()">TN Interest and Rate Percentage</button>
+        </div>
+
+    </div>
+
+    <!-- Rate Percentage Finder Section -->
+    <div id="rate-percentage-section" style="display:none;">
+        <h1>Rate Percentage Finder</h1>
+
+        <input type="number" id="principal" class="input-box" placeholder="Enter Principal Amount">
+        <input type="number" id="emi" class="input-box" placeholder="Enter EMI (Monthly)">
+        <input type="number" id="period" class="input-box" placeholder="Enter Period (months)">
+        <button class="button" onclick="calculateBankRate()">Calculate Bank Rate Percentage</button>
+        
+        <p id="bank-rate-result"></p>
+
+        <button class="button" onclick="goBack()">Go Back</button>
+    </div>
+
+    <!-- Interest and Rate Percentage Finder Section -->
+    <div id="interest-rate-section" style="display:none;">
+        <h1>Interest and Rate Percentage Finder</h1>
+
+        <div class="sub-options">
+            <button class="button" onclick="showBankRateFinder()">Bank Rate Percentage</button>
+            <button class="button" onclick="showTNInterestFinder()">TN Interest</button>
+        </div>
+
+        <button class="button" onclick="goBack()">Go Back</button>
+    </div>
+
+    <!-- Bank Rate Finder Section -->
+    <div id="bank-rate-finder-section" style="display:none;">
+        <h1>Bank Rate Percentage Finder</h1>
+
+        <input type="number" id="tn-interest-bank" class="input-box" placeholder="Enter TN Interest">
+        <button class="button" onclick="calculateBankRatePercentage()">Calculate Bank Rate Percentage</button>
+
+        <p id="bank-rate-result-text"></p>
+
+        <button class="button" onclick="goBack()">Go Back</button>
+    </div>
+
+    <!-- TN Interest Finder Section -->
+    <div id="tn-interest-finder-section" style="display:none;">
+        <h1>TN Interest Finder</h1>
+
+        <input type="number" id="bank-rate" class="input-box" placeholder="Enter Bank Rate Percentage">
+        <button class="button" onclick="calculateTNInterest()">Calculate TN Interest</button>
+
+        <p id="tn-interest-result"></p>
+
+        <button class="button" onclick="goBack()">Go Back</button>
+    </div>
+
+    <!-- New Bank Rate Percentage Finder Section for Instant Calculation -->
+    <div id="instant-bank-rate-section" style="display:none;">
+        <h1>Bank Rate Percentage to TN Interest Finder</h1>
+
+        <input type="number" id="bank-rate-instant" class="input-box" placeholder="Enter Bank Rate Percentage" oninput="calculateInstantTNInterest()">
+        
+        <p id="instant-tn-interest-result"></p>
+
+        <button class="button" onclick="goBack()">Go Back</button>
+    </div>
+
+    <!-- Google Translate Section (South Indian Languages) -->
+    <div class="google-translate">
+        <div id="google_translate_element"></div>
+    </div>
+
+</div>
+
+<script>
+    // Show the Rate Percentage Finder section
+    function showRatePercentageFinder() {
+        document.getElementById('main-section').style.display = 'none';
+        document.getElementById('rate-percentage-section').style.display = 'block';
+    }
+
+    // Show the Interest and Rate Percentage Finder section
+    function showInterestRateFinder() {
+        document.getElementById('main-section').style.display = 'none';
+        document.getElementById('interest-rate-section').style.display = 'block';
+    }
+
+    // Show the Bank Rate Percentage Finder section
+    function showBankRateFinder() {
+        document.getElementById('interest-rate-section').style.display = 'none';
+        document.getElementById('bank-rate-finder-section').style.display = 'block';
+    }
+
+    // Show the TN Interest Finder section
+    function showTNInterestFinder() {
+        document.getElementById('interest-rate-section').style.display = 'none';
+        document.getElementById('tn-interest-finder-section').style.display = 'block';
+    }
+
+    // Show the Instant Bank Rate to TN Interest Finder section
+    function showInstantBankRateFinder() {
+        document.getElementById('interest-rate-section').style.display = 'none';
+        document.getElementById('instant-bank-rate-section').style.display = 'block';
+    }
+
+    // Go back to the main page
+    function goBack() {
+        document.getElementById('rate-percentage-section').style.display = 'none';
+        document.getElementById('interest-rate-section').style.display = 'none';
+        document.getElementById('bank-rate-finder-section').style.display = 'none';
+        document.getElementById('tn-interest-finder-section').style.display = 'none';
+        document.getElementById('instant-bank-rate-section').style.display = 'none';
+        document.getElementById('main-section').style.display = 'block';
+    }
+
+    // Function to calculate Bank Rate Percentage from Principal, EMI, and Period
+    function calculateBankRate() {
+        const principal = parseFloat(document.getElementById('principal').value);
+        const emi = parseFloat(document.getElementById('emi').value);
+        const period = parseInt(document.getElementById('period').value);
+        
+        if (isNaN(principal) || isNaN(emi) || isNaN(period) || principal <= 0 || emi <= 0 || period <= 0) {
+            document.getElementById('bank-rate-result').innerText = 'Please enter valid values for Principal, EMI, and Period (greater than zero).';
+            return;
+        }
+
+        // Use a method to approximate the interest rate (monthly)
+        const monthlyRate = calculateInterestRate(principal, emi, period);
+        const annualRate = monthlyRate * 12 * 100; // Convert to annual percentage
+        document.getElementById('bank-rate-result').innerText = 'Bank Rate Percentage: ' + annualRate.toFixed(2) + '%';
+    }
+
+    // Function to approximate the interest rate based on EMI, using binary search
+    function calculateInterestRate(principal, emi, months) {
+        let low = 0.0001;  // Start with a very low rate
+        let high = 1;  // Start with a high rate (100% annually)
+        let mid = 0;
+        let tolerance = 0.0001;
+
+        while (high - low > tolerance) {
+            mid = (low + high) / 2;
+            let calculatedEMI = principal * mid * Math.pow(1 + mid, months) / (Math.pow(1 + mid, months) - 1);
+            if (calculatedEMI < emi) {
+                low = mid;
+            } else {
+                high = mid;
+            }
+        }
+
+        return mid; // Return the monthly interest rate
+    }
+    // Function to calculate TN Interest based on Bank Rate Percentage (Formula: TN Interest = Bank Rate / 12)
+    function calculateTNInterest() {
+        const bankRate = parseFloat(document.getElementById('bank-rate').value);
+        
+        if (isNaN(bankRate) || bankRate <= 0) {
+            document.getElementById('tn-interest-result').innerText = 'Please enter a valid Bank Rate Percentage.';
+            return;
+        }
+
+        const tnInterest = bankRate / 12;
+        document.getElementById('tn-interest-result').innerText = 'TN Interest: ' + tnInterest.toFixed(2);
+    }
+    // Function to calculate Bank Rate Percentage based on TN Interest (Formula: Bank Rate = TN Interest * 12)
+    function calculateBankRatePercentage() {
+        const tnInterest = parseFloat(document.getElementById('tn-interest-bank').value);
+        
+        if (isNaN(tnInterest) || tnInterest <= 0) {
+            document.getElementById('bank-rate-result-text').innerText = 'Please enter a valid TN Interest value.';
+            return;
+        }
+
+        const bankRatePercentage = tnInterest * 12;
+        document.getElementById('bank-rate-result-text').innerText = 'Bank Rate Percentage: ' + bankRatePercentage.toFixed(2) + '%';
+    }
+
+    // Function to calculate TN Interest based on Bank Rate Percentage (Formula: TN Interest = Bank Rate / 12)
+    function calculateTNInterest() {
+        const bankRate = parseFloat(document.getElementById('bank-rate').value);
+        
+        if (isNaN(bankRate) || bankRate <= 0) {
+            document.getElementById('tn-interest-result').innerText = 'Please enter a valid Bank Rate Percentage.';
+            return;
+        }
+
+        const tnInterest = bankRate / 12;
+        document.getElementById('tn-interest-result').innerText = 'TN Interest: ' + tnInterest.toFixed(2);
+    }
+
+    // Function to calculate TN Interest instantly based on Bank Rate Percentage
+    function calculateInstantTNInterest() {
+        const bankRate = parseFloat(document.getElementById('bank-rate-instant').value);
+        
+        if (isNaN(bankRate) || bankRate <= 0) {
+            document.getElementById('instant-tn-interest-result').innerText = 'Please enter a valid Bank Rate Percentage.';
+            return;
+        }
+
+        const tnInterest = bankRate / 12;
+        document.getElementById('instant-tn-interest-result').innerText = 'TN Interest: ' + tnInterest.toFixed(2);
+    }
+
+    // Google Translate initialization for South Indian Languages
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            includedLanguages: 'ta,te,kn,ml,hi',  // South Indian languages (Tamil, Telugu, Kannada, Malayalam, Hindi)
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+        }, 'google_translate_element');
+    }
+
+</script>
+
+<!-- Google Translate API -->
+<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+</body>
+</html>
